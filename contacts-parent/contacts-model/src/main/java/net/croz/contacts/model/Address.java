@@ -63,7 +63,11 @@ public class Address extends AbstractEntity {
 		
 		return returnValue;
 	}
-
+	
+	@Override
+	public String toString(){
+		return this.getStreet()+" "+this.getStreetNo();
+	}
 	
 //	@Override
 //	public int hashCode() {
