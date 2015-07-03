@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 28, 2015 1:48:57 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+	<class name="net.croz.contacts.model.Contact" table="CONTACT">
+
+		<id name="id" type="java.lang.Long" column="ID">
+			<generator class="native"  />
+		</id>
+
+		<property name="firstName" type="java.lang.String">
+			<column name="FIRSTNAME" length="20"/>
+		</property>
+
+		<property name="lastName" type="java.lang.String">
+			<column name="LASTNAME" length="50"/>
+		</property>
+
+		<property name="phone" type="java.lang.String">
+			<column name="PHONE" length="13"/>
+		</property>
+
+		<property name="email" type="java.lang.String">
+			<column name="EMAIL" length="50"/>
+		</property>
+
+		<many-to-one name="address" class="net.croz.contacts.model.Address" fetch="select" access="field" cascade="all" lazy="false">
+			<column name="ADDRESS" not-null="true"/>
+		</many-to-one>
+		
+		<many-to-one name="sex" class="net.croz.contacts.model.Sex" fetch="select" access="field" lazy="false">
+			<column name="SEX" not-null="true" />
+		</many-to-one>
+		
+		<!-- <property name="contactBookId" type="java.lang.Long" column="CONTACT_BOOK_ID" /> -->
+		
+		<!-- <set name="m_contactBooks" table="CONTACT_BOOK_CONTACTS" inverse="false">
+         	<key column="contact_id"/>
+         	<many-to-many column="contact_book_id" class="net.croz.contacts.model.ContactBook"/>
+      	</set> -->
+		
+	</class>
+</hibernate-mapping>

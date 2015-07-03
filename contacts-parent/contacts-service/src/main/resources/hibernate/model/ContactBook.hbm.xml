@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated May 2, 2015 10:33:56 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="net.croz.contacts.model.ContactBook" table="CONTACT_BOOK">
+        
+        <id name="id" type="java.lang.Long" column="ID">
+			<generator class="native"  />
+		</id>
+        
+        <set name="contacts" fetch="join" access="field" cascade="save-update, delete-orphan" inverse="false" lazy="false" >
+        	<key column="CONTACT_BOOK_ID" not-null="true" />
+        	<one-to-many class="net.croz.contacts.model.Contact" />
+        </set>
+        
+    </class>
+</hibernate-mapping>

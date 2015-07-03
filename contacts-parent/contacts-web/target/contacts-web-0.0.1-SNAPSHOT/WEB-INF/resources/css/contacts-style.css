@@ -1,0 +1,102 @@
+@CHARSET "UTF-8";
+
+#navigacija li{
+float:left;
+width:30%;
+margin:1%;
+background-color:#000;
+font-weight:bold;
+text-align:center;
+
+}
+
+#content {
+	clear: both;
+}
+
+ul{
+list-style-type:none;
+}
+
+#navigacija a{display:block; background-color:#330000; color:white;}
+#navigacija a:visited{text-decoration:none;color:white;}
+#navigacija a:hover{background-color:#660000;}
+
+a:visited{color:white}
+
+.error {
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
+
+.msg {
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	color: #31708f;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+}
+
+#login-box {
+	width: 300px;
+	padding: 20px;
+	margin: 100px auto;
+	background: #fff;
+	color: black;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border: 1px solid #000;
+}
+
+body {
+	color: white;
+	min-width: 1000px;
+	width: 85%;
+	margin: auto;
+	font-variant: small-caps;
+	font-family: Arial;
+	background: #000;
+	background-attachment: fixed;
+	
+}
+
+h2 {
+	margin-top: 150px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 32;
+	font-family: Lucida;
+	
+}
+
+
+#lista {
+	clear: both;
+	margin-top:100px;
+	
+}
+
+/* #logout {
+	margin-top:50px;
+	float:right;
+} */
+
+#header .id {
+	float: right;
+}
+
+
+td {
+	text-align: center;
+}
+
+a {
+	color: #fff;
+}

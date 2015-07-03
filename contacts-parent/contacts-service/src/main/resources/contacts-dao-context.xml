@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+	<tx:annotation-driven proxy-target-class="true" />
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:hibernate/hibernate.properties</value>
+				<value>classpath:database.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+	</bean>
+
+	<bean id="dbDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+    	<property name="jndiName" value="java:comp/env/jdbc/ContactDB"/>
+    	<property name="proxyInterface" value="javax.sql.DataSource"></property>
+    	<property name="resourceRef" 
+                  value="true" /> 
+	</bean>
+
+	<!-- <jee:jndi-lookup expected-type="javax.sql.DataSource" id="ContactDB" jndi-name="java:comp/env/h2"/> -->
+
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dbDataSource" />
+		<property name="mappingResources">
+			<list>
+				<value>hibernate/model/Country.hbm.xml</value>
+				<value>hibernate/model/Sex.hbm.xml</value>
+				<value>hibernate/model/City.hbm.xml</value>
+				<value>hibernate/model/Address.hbm.xml</value>
+				<value>hibernate/model/Contact.hbm.xml</value>
+				<value>hibernate/model/ContactBook.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.dialect">${dialect}</prop>
+				<!-- <prop key="hbm2ddl.auto">validate</prop> -->
+				<prop key="hibernate.show_sql">${sql}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="hibernateCodeDao" class="net.croz.contacts.dao.hibernate.HibernateCodeDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="hibernateContactBookDao" class="net.croz.contacts.dao.hibernate.HibernateContactBookDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<!-- bean-ovi za podatke koji ce se uneti u bazu -->
+	
+	
+	<!-- polovi -->
+	<bean id="sexM" class="net.croz.contacts.model.Sex">
+		<property name="name" value="Male" />
+	</bean>
+	<bean id="sexF" class="net.croz.contacts.model.Sex">
+		<property name="name" value="Female" />
+	</bean>
+
+	<!-- drzave -->
+	<bean id="serbia" class="net.croz.contacts.model.Country">
+		<property name="name" value="Serbia" />
+		<property name="alpha2" value="21" />
+		<property name="alpha3" value="31" />
+	</bean>
+	<bean id="croatia" class="net.croz.contacts.model.Country">
+		<property name="name" value="Croatia" />
+		<property name="alpha2" value="22" />
+		<property name="alpha3" value="32" />
+	</bean>
+	<bean id="bosnia" class="net.croz.contacts.model.Country">
+		<property name="name" value="Bosnia" />
+		<property name="alpha2" value="23" />
+		<property name="alpha3" value="33" />
+	</bean>
+
+	<!-- gradovi -->
+	<bean id="belgrade" class="net.croz.contacts.model.City">
+		<property name="name" value="Belgrade" />
+		<property name="country" ref="serbia" />
+		<property name="zipCode" value="11000" />
+	</bean>
+	<bean id="smederevo" class="net.croz.contacts.model.City">
+		<property name="name" value="Smederevo" />
+		<property name="country" ref="serbia" />
+		<property name="zipCode" value="12000" />
+	</bean>
+	<bean id="zagreb" class="net.croz.contacts.model.City">
+		<property name="name" value="Zagreb" />
+		<property name="country" ref="croatia" />
+		<property name="zipCode" value="13000" />
+	</bean>
+	<bean id="split" class="net.croz.contacts.model.City">
+		<property name="name" value="Split" />
+		<property name="country" ref="croatia" />
+		<property name="zipCode" value="14000" />
+	</bean>
+
+	<!-- adrese -->
+	<bean id="zDjindjic" class="net.croz.contacts.model.Address">
+		<property name="street" value="Bulevar Zorana Djindjica" />
+		<property name="streetNo" value="105/6" />
+		<property name="city" ref="belgrade" />
+	</bean>
+	<bean id="aCarnojevic" class="net.croz.contacts.model.Address">
+		<property name="street" value="Bulevar Arsenija Carnojevica" />
+		<property name="streetNo" value="10" />
+		<property name="city" ref="belgrade" />
+	</bean>
+	<bean id="lastovska1" class="net.croz.contacts.model.Address">
+		<property name="street" value="Lastovska" />
+		<property name="streetNo" value="23" />
+		<property name="city" ref="zagreb" />
+	</bean>
+	<bean id="lastovska2" class="net.croz.contacts.model.Address">
+		<property name="street" value="Lastovska" />
+		<property name="streetNo" value="24" />
+		<property name="city" ref="zagreb" />
+	</bean>
+	<bean id="oBrigada" class="net.croz.contacts.model.Address">
+		<property name="street" value="Omladinskih briga" />
+		<property name="streetNo" value="103" />
+		<property name="city" ref="split" />
+	</bean>
+
+	<!-- kontakti -->
+	<bean id="dusan" class="net.croz.contacts.model.Contact">
+		<property name="firstName" value="Dusan" />
+		<property name="lastName" value="Mancic" />
+		<property name="email" value="mail" />
+		<property name="phone" value="num" />
+		<property name="address" ref="zDjindjic" />
+		<property name="sex" ref="sexM" />
+	</bean>
+	<bean id="nikola" class="net.croz.contacts.model.Contact">
+		<property name="firstName" value="Nikola" />
+		<property name="lastName" value="Sapun" />
+		<property name="email" value="mail" />
+		<property name="phone" value="num" />
+		<property name="address" ref="lastovska1" />
+		<property name="sex" ref="sexM" />
+	</bean>
+	<bean id="neca" class="net.croz.contacts.model.Contact">
+		<property name="firstName" value="Nemanja" />
+		<property name="lastName" value="Krneta" />
+		<property name="email" value="mail" />
+		<property name="phone" value="num" />
+		<property name="address" ref="lastovska2" />
+		<property name="sex" ref="sexM" />
+	</bean>
+	<bean id="djura" class="net.croz.contacts.model.Contact">
+		<property name="firstName" value="Jasmina" />
+		<property name="lastName" value="Nikolic" />
+		<property name="email" value="mail" />
+		<property name="phone" value="num" />
+		<property name="address" ref="oBrigada" />
+		<property name="sex" ref="sexF" />
+	</bean>
+	<bean id="amel" class="net.croz.contacts.model.Contact">
+		<property name="firstName" value="Amel" />
+		<property name="lastName" value="Jasari" />
+		<property name="email" value="mail" />
+		<property name="phone" value="num" />
+		<property name="address" ref="aCarnojevic" />
+		<property name="sex" ref="sexM" />
+	</bean>
+	<bean id="marijana" class="net.croz.contacts.model.Contact">
+		<property name="firstName" value="Marijana" />
+		<property name="lastName" value="Bozovic" />
+		<property name="email" value="mail" />
+		<property name="phone" value="num" />
+		<property name="address" ref="oBrigada" />
+		<property name="sex" ref="sexF" />
+	</bean>
+	
+	<bean id="contactBook" class="net.croz.contacts.model.ContactBook">
+		<property name="contacts">
+			<set>
+				<ref bean="amel" />
+				<ref bean="djura" />
+				<ref bean="marijana" />
+				<ref bean="dusan" />
+				<ref bean="nikola" />
+				<ref bean="neca" />
+			</set>
+		</property>
+	</bean>
+
+</beans>

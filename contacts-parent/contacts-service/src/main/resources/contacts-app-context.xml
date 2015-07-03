@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+	 ">
+
+	<aop:aspectj-autoproxy />
+
+	<bean id="codeServiceImpl" class="net.croz.contacts.service.code.CodeServiceImpl">
+		<property name="hcd" ref="hibernateCodeDao" />
+		<property name="key">
+			<list>
+				<value>net.croz.contacts.model.Sex</value>
+				<value>net.croz.contacts.model.City</value>
+				<value>net.croz.contacts.model.Country</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="contactBookServiceImpl"
+		class="net.croz.contacts.service.contactbook.ContactBookServiceImpl">
+		<property name="hcbd" ref="hibernateContactBookDao" />
+	</bean>
+
+	<bean id="exceptionAdvice" class="net.croz.contacts.aspect.ExceptionAdvice">
+		<property name="errorTypes" ref="mapa" />
+	</bean>
+
+	<util:map id="mapa" key-type="net.croz.contacts.service.exceptions.ServiceException.ErrorType" value-type="java.util.List">
+		<entry key="DB_ERROR" value-ref="lista1" />
+		<entry key="UNRESOLVED_SERVER_ERROR" value-ref="lista3" />
+		<entry key="BUSINESS_ERROR" value-ref="lista2" />
+	</util:map>
+
+
+	<util:list id="lista1" >
+		<value>org.springframework.dao.DataAccessException</value>
+	</util:list>
+
+	<util:list id="lista2">
+		<value>java.lang.IllegalArgumentException</value>
+		<value>java.lang.IllegalStateException</value>
+	</util:list>
+	
+	<util:list id="lista3">
+		<!-- <value></value> -->
+	</util:list>
+
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename">
+			<value>messages/messages</value>
+		</property>
+	</bean>
+
+	<bean id="serviceInvocationAdvice" class="net.croz.contacts.aspect.ServiceInvocationAdvice" />
+
+	<import resource="contacts-dao-context.xml" />
+
+</beans>

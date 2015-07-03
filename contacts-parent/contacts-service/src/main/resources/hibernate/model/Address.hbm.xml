@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 28, 2015 1:48:57 PM by Hibernate Tools 3.4.0.CR1 -->
+
+<hibernate-mapping>
+	<class name="net.croz.contacts.model.Address" table="ADDRESS" >
+		<id name="id" type="java.lang.Long" column="ID" >
+			<generator class="native"  />
+		</id>
+		<property name="street" type="java.lang.String" >
+            <column name="STREET" not-null="true" length="50"/>
+        </property>
+		
+		<property name="streetNo" type="java.lang.String">
+			<column name="STREET_NO" not-null="false" length="5"/>
+		</property>
+		
+		<many-to-one name="city" class="net.croz.contacts.model.City" access="field" fetch="select" lazy="false" >
+			<column name="CITY" not-null="true"/>
+		</many-to-one>
+		
+		
+	</class>
+
+</hibernate-mapping>
